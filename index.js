@@ -21,14 +21,18 @@ server.get("/users", function (req,res) {
 server.post("/users", (req, res) => {
     const userInfo = req.body
 
-    dbModel
-        .insert(userInfo)
-        .then(user => {
-            res.status(201).json(user)
-        })
-        .catch(error => {
-            res.status(500).json( { error: "There was an error while saving the user to the database" } )
-        })
+        if (userInfo.name && userInfo.bio){
+        dbModel
+            .insert(userInfo)  
+            .then(user => {
+                res.status(201).json(user)
+            })
+            .catch(error => {
+                res.status(500).json( { error: "There was an error while saving the user to the database" } )
+            })
+        } else {
+            res.status(400).json( {errorMessage: "Please provide name and bio for the user."} )
+        }
 })
 
 server.get("/users/:id", (req, res) => {
