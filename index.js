@@ -69,6 +69,7 @@ server.put("/users/:id", (req,res) => {
     const id = req.params.id;
     const changes = req.body;
 
+    if (changes.name && changes.bio){
     dbModel
         .update(id, changes)
         .then(updated => {
@@ -81,6 +82,9 @@ server.put("/users/:id", (req,res) => {
         .catch(error => {
             res.status(500).json( { error: "The user information could not be modified." } )
         })
+    } else {
+        res.status(400).json( {errorMessage: "Please provide name and bio for the user."} )
+    }
 
 })
 
